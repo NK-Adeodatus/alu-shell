@@ -9,8 +9,7 @@ if [[ "$#" == "1" ]]; then
 
   elif [[ "$1" == "stop" ]]; then
     if test -f "/var/run/my_process.pid"; then   # Check if PID file exists
-      kill "$(cat /var/run/my_process.pid)"      # Kill the process
-      fi
+      kill "$(cat /var/run/my_process.pid)"      # Kill the process~
       rm /var/run/my_process.pid                # Remove the PID file
       echo "manage_my_process stopped"
     else
