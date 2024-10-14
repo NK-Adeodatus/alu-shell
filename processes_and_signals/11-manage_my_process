@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # manage_my_process
 
-if [[ "$#" == "1" ]]; then
   if [[ "$1" == "start" ]]; then
     ./manage_my_process &   # Start the process in the background
     echo "$!" > /var/run/my_process.pid   # Save its PID
@@ -9,28 +8,26 @@ if [[ "$#" == "1" ]]; then
 
   elif [[ "$1" == "stop" ]]; then
     if test -f "/var/run/my_process.pid"; then   # Check if PID file exists
-      kill "$(cat /var/run/my_process.pid)"      # Kill the process~
-      rm /var/run/my_process.pid                # Remove the PID file
-      echo "manage_my_process stopped"
+    	kill "$(cat /var/run/my_process.pid)"      # Kill the process~
+     	rm /var/run/my_process.pid                # Remove the PID file
+     	echo "manage_my_process stopped"
     else
-      echo "No process running (PID file not found)"
+    	echo "No process running (PID file not found)"
     fi
  
   elif [[ "$1" == "restart" ]]; then
-    # Stop the process if running
-    if test -f "/var/run/my_process.pid"; then
-      kill "$(cat /var/run/my_process.pid)"
-      rm /var/run/my_process.pid
-    fi
-    # Start the process again
-    ./manage_my_process &
-    echo "$!" > /var/run/my_process.pid
-    echo "manage_my_process restarted"
+    	# Stop the process if running
+  	if test -f "/var/run/my_process.pid"; then
+  		kill "$(cat /var/run/my_process.pid)"
+        	rm /var/run/my_process.pid
+    	fi
+        # Start the process again
+        ./manage_my_process &
+        echo "$!" > /var/run/my_process.pid
+        echo "manage_my_process restarted"
 
   else
-    echo "Usage: manage_my_process {start|stop|restart}"
+    	echo "Usage: manage_my_process {start|stop|restart}"
   fi
-else
-  echo "Usage: manage_my_process {start|stop|restart}"
-fi
+  
 
