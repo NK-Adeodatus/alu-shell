@@ -1,33 +1,29 @@
 #!/usr/bin/env bash
-# manage_my_process
+# The init script manages another process. It can start, stop, or restart the process, and displays messages and creates/deletes a PID file.
 
-  if [[ "$1" == "start" ]]; then
-    ./manage_my_process &   # Start the process in the background
-    echo "$!" > /var/run/my_process.pid   # Save its PID
+if [ "$1" == "start" ]; then
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
     echo "manage_my_process started"
-
-  elif [[ "$1" == "stop" ]]; then
-    if test -f "/var/run/my_process.pid"; then   # Check if PID file exists
-    	kill "$(cat /var/run/my_process.pid)"      # Kill the process~
-     	rm /var/run/my_process.pid                # Remove the PID file
-     	echo "manage_my_process stopped"
+elif [ "$1" == "stop" ]; then
+    if [ -f /var/run/my_process.pid ]; then
+        pid=$(cat /var/run/my_process.pid)
+        kill "$pid" 2>/dev/null
+        rm /var/run/my_process.pid
+        echo "manage_my_process stopped"
     else
-    	echo "No process running (PID file not found)"
+        echo "No PID file found. Process may not be running."
     fi
- 
-  elif [[ "$1" == "restart" ]]; then
-    	# Stop the process if running
-  	if test -f "/var/run/my_process.pid"; then
-  		kill "$(cat /var/run/my_process.pid)"
-        	rm /var/run/my_process.pid
-    	fi
-        # Start the process again
-        ./manage_my_process &
-        echo "$!" > /var/run/my_process.pid
-        echo "manage_my_process restarted"
-
-  else
-    	echo "Usage: manage_my_process {start|stop|restart}"
-  fi
-  
+elif [ "$1" == "restart" ]; then 
+    if [ -f /var/run/my_process.pid ]; then
+        pid=$(cat /var/run/my_process.pid)
+        kill "$pid" 2>/dev/null
+        rm /var/run/my_process.pid
+    fi
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process restarted"
+else
+    echo "Usage: manage_my_process {start|stop|restart}"
+fi
 
